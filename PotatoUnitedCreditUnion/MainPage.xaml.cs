@@ -7,7 +7,6 @@ namespace PotatoUnitedCreditUnion
         public MainPage()
         {
             InitializeComponent();
-
             Shell.Current.GoToAsync(nameof(LoginPage));
         }
     }

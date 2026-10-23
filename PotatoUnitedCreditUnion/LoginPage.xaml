@@ -6,16 +6,29 @@
         <BackButtonBehavior IsVisible="False" IsEnabled="False" />
     </Shell.BackButtonBehavior>
 
-    <VerticalStackLayout>
-        <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
-               WidthRequest="350" HeightRequest="350" Margin="20"
-               Text="PFP LATER" />
-        <Entry WidthRequest="300" HeightRequest="50" Margin="10"
-            Placeholder="Username" />
-        <Entry WidthRequest="300" HeightRequest="50" Margin="10"
-            Placeholder="Password" IsPassword="True"/>
-        <Button WidthRequest="50" HeightRequest="50" Margin="10"
-            Text="->" Clicked="LoginBTN_ClickedAsync"/>
-    </VerticalStackLayout>
+    <Grid RowDefinitions="*, 6*, *, *, 3*" ColumnDefinitions="*, 2*, *">
+
+        <Image  x:Name="pfp_IMG"
+               Grid.Row="1" Grid.Column="1"
+               WidthRequest="350" HeightRequest="350" Margin="20" Aspect="AspectFit"/>
+
+        <Entry x:Name="user_ENT"
+               Grid.Row="2" Grid.Column="1"
+               HeightRequest="50" Margin="10"
+               FontSize="24" Placeholder="Username"
+               ReturnType="Next"/>
+
+        <Entry x:Name="pass_ENT"
+               Grid.Row="3" Grid.Column="1"
+               HeightRequest="50" Margin="10"
+               FontSize="24" Placeholder="Password" IsPassword="True"
+               ReturnType="Next" Completed="Pass_ENT_Completed"/>
+
+        <Button x:Name="login_BTN"
+                Grid.Row="3" Grid.Column="2"
+                HorizontalOptions="Start" WidthRequest="50" HeightRequest="50" Margin="10"
+                Text="->" Clicked="Login_BTN_ClickedAsync"/>
+        
+    </Grid>
 
 </ContentPage>
