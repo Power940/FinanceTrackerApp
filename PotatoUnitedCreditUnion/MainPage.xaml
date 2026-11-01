@@ -8,12 +8,20 @@
 
     <AbsoluteLayout>
         <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
-               AbsoluteLayout.LayoutBounds="0.5, 0.1, AutoSize, AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional"
+               AbsoluteLayout.LayoutBounds="0.5, 0.2, AutoSize, AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional"
                Text="Welcome!" />
 
         <Button x:Name="login_BTN"
+                AbsoluteLayout.LayoutBounds="0.5, 0.4, AutoSize, AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional"
+                Text="loginPg" Clicked="Login_BTN_Clicked"/>
+
+        <Button x:Name="daily_BTN"
                 AbsoluteLayout.LayoutBounds="0.5, 0.5, AutoSize, AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional"
-                Text="loginPg" Clicked="login_BTN_Clicked"/>
+                Text="dailyPg" Clicked="Daily_BTN_Clicked"/>
+
+        <Button x:Name="history_BTN"
+                AbsoluteLayout.LayoutBounds="0.5, 0.6, AutoSize, AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional"
+                Text="historyPg" Clicked="History_BTN_Clicked"/>
     </AbsoluteLayout>
 
 </ContentPage>

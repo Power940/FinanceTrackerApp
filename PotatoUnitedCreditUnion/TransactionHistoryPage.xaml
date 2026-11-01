@@ -1,13 +1,133 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PotatoUnitedCreditUnion.TransactionHistoryPage">
+             x:Class="PotatoUnitedCreditUnion.TransactionHistoryPage"
+             xmlns:local="clr-namespace:PotatoUnitedCreditUnion">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior IsVisible="False" IsEnabled="False" />
     </Shell.BackButtonBehavior>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:CashColorConverter x:Key="CashColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-    <AbsoluteLayout>
 
-    </AbsoluteLayout>
+    <Grid ColumnDefinitions="3*, *">
+
+        <!-- Scrollable transaction history -->
+        <CollectionView x:Name="scrollableTransactionItems_CV"
+                        Grid.Column="0"
+                        ItemsSource="{Binding TransactionHistory}"
+                        Margin="20"
+                        VerticalOptions="Fill"
+                        HorizontalOptions="Fill">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 8"
+                            StrokeThickness="1"
+                            Margin="0,0,0,10"
+                            Padding="15"
+                            BackgroundColor="#E0E0E0">
+
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="5">
+
+                            <HorizontalStackLayout Grid.Column="0"
+                                                   Spacing="5"
+                                                   VerticalOptions="Center">
+
+                                <Label Text="{Binding DateTimeOfItem, StringFormat='{0:MM/dd/yy | h:mm tt}'}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+
+                                <Label Text="{Binding CashString}"
+                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+
+                                <Label Text="{Binding Message}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+
+                            </HorizontalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="Delete"
+                                    VerticalOptions="Center"
+                                    Clicked="Delete_BTN_Clicked"/>
+
+                        </Grid>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <!-- Controls -->
+        <Grid Grid.Column="1" RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *">
+
+            <Button x:Name="back_BTN"
+                    Grid.Row="0" Grid.Column="2"
+                    WidthRequest="50" HeightRequest="50" Margin="10"
+                    HorizontalOptions="End" VerticalOptions="Start"
+                    Text="->" Clicked="Back_BTN_Clicked"/>
+
+            <Label Grid.Row="1" Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   FontSize="20" TextColor="White"
+                   Text="New Item"/>
+
+            <Label x:Name="negative_LB"
+                   Grid.Row="1" Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   HorizontalOptions="Start" VerticalOptions="End"
+                   FontSize="20" TextColor="White"
+                   Text="+"/>
+
+            <Switch x:Name="negative_SW"
+                    Grid.Row="2" Grid.Column="0" VerticalOptions="Start"
+                    IsToggled="false"
+                    Toggled="Negative_SW_Toggled"/>
+
+            <Entry x:Name="primary_ENT"
+                   Grid.Row="2" Grid.Column="1"
+                   HeightRequest="50"
+                   VerticalOptions="Start"
+                   FontSize="24" Placeholder="0"
+                   ReturnType="Next"
+                   TextChanged="OnNumericTextChanged"/>
+
+            <Entry x:Name="secondary_ENT"
+                   Grid.Row="2" Grid.Column="2"
+                   HeightRequest="50"
+                   HorizontalOptions="Start" VerticalOptions="Start"
+                   FontSize="24" Placeholder="00"
+                   MaxLength="2"
+                   ReturnType="Next"
+                   TextChanged="OnNumericTextChanged"/>
+
+            <Entry x:Name="message_ENT"
+                   Grid.Row="3" Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   FontSize="24" Placeholder="Message"
+                   ReturnType="Next"
+                   TextChanged="NoCommaTextChanged"/>
+            
+            <DatePicker  x:Name="date_DP"
+                         Grid.Row="2" Grid.Column="1"
+                         VerticalOptions="End"/>
+            
+            <TimePicker x:Name="time_TP"
+                         Grid.Row="2" Grid.Column="2"
+                         VerticalOptions="End"/>
+
+            <Button x:Name="create_BTN"
+                    Grid.Row="4" Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="10"
+                    Text="Create Item" Clicked="Create_BTN_Clicked"/>
+        </Grid>
+
+    </Grid>
 
 </ContentPage>

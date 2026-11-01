@@ -16,6 +16,11 @@ public partial class LoginPage : ContentPage
     public LoginPage()
     {
         InitializeComponent();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
         SetupData();
     }
 
@@ -29,13 +34,12 @@ public partial class LoginPage : ContentPage
         if (!File.Exists(userDataFilePath))
         {
             File.Create(userDataFilePath).Dispose();
-            System.Diagnostics.Debug.WriteLine($"Created userData.csv file in: {FileSystem.Current.AppDataDirectory}");
         }
 
 
         foreach (string line in File.ReadLines(userDataFilePath))
         {
-            if (String.IsNullOrWhiteSpace(line)) { return; }
+            if (String.IsNullOrWhiteSpace(line)) { continue; }
             if (int.TryParse(line.Split(',')[0], out int id)) { userIds.Add(id); }
         }
 
@@ -48,29 +52,29 @@ public partial class LoginPage : ContentPage
         UpdateUserElementsUI();
     }
 
-    private void Login_BTN_Clicked(object sender, EventArgs e)
+    private void Login_BTN_Clicked(object? sender, EventArgs e)
     {
         AccountLoginCheck(pass_ENT.Text);
     }
 
-    private void NextUser_BTN_Clicked(object sender, EventArgs e)
+    private void NextUser_BTN_Clicked(object? sender, EventArgs e)
     {
         if (userIdIndex < userIds.Count - 1) { userIdIndex++; }
         UpdateUserElementsUI();
     }
 
-    private void PrevUser_BTN_Clicked(object sender, EventArgs e)
+    private void PrevUser_BTN_Clicked(object? sender, EventArgs e)
     {
         if (userIdIndex > -1) { userIdIndex--; }
         UpdateUserElementsUI();
     }
 
-    private void Pass_ENT_Completed(object sender, EventArgs e)
+    private void Pass_ENT_Completed(object? sender, EventArgs e)
     {
         AccountLoginCheck(pass_ENT.Text);
     }
 
-    private void RemoveErrorLB(object sender, EventArgs e)
+    private void RemoveErrorLB(object? sender, EventArgs e)
     {
         error_LB.Text = string.Empty;
     }
@@ -85,7 +89,7 @@ public partial class LoginPage : ContentPage
         }
         else
         {
-            userLoginParts = File.ReadLines(userDataFilePath).FirstOrDefault(line => line.StartsWith(userIds[userIdIndex].ToString())).Split(',');
+            userLoginParts = File.ReadLines(userDataFilePath).First(line => line.StartsWith(userIds[userIdIndex].ToString())).Split(',');
             pfp_IMG.Source = Path.Combine(FileSystem.Current.AppDataDirectory, userLoginParts[0].ToString(), "pfp.png");
             user_ENT.IsVisible = false;
             user_LB.IsVisible = true;
@@ -104,6 +108,7 @@ public partial class LoginPage : ContentPage
                 if (pass != userLoginParts[2]) { error_LB.Text = "Password is incorrect"; return; }
 
                 MainPage.USER_ID = int.Parse(userLoginParts[0]);
+                MainPage.USER_DIR_PATH = Path.Combine(FileSystem.Current.AppDataDirectory, userLoginParts[0].ToString());
 
                 await Shell.Current.GoToAsync("..");
             }
@@ -125,6 +130,8 @@ public partial class LoginPage : ContentPage
             File.AppendAllText(userDataFilePath, $"{newUserIdNum},{user_ENT.Text},{pass_ENT.Text}\n");
 
             MainPage.USER_ID = newUserIdNum;
+            MainPage.USER_DIR_PATH = Path.Combine(FileSystem.Current.AppDataDirectory, userLoginParts[0].ToString());
+
             await Shell.Current.GoToAsync("..");
         }
     }
