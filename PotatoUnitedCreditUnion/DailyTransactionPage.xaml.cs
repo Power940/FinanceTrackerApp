@@ -49,6 +49,7 @@ public partial class DailyTransactionPage : ContentPage
                 TransactionHistory.Add(temp);
             }
         }
+        SortAndUpdateTotalTransactionHistory();
     }
 
     private void OnNumericTextChanged(object? sender, TextChangedEventArgs e)
@@ -85,7 +86,7 @@ public partial class DailyTransactionPage : ContentPage
 
             TransactionHistory.Add(temp);
             scrollableTransactionItems_CV.ScrollTo(TransactionHistory.Count() - 1);
-            SortTransactionHistory();
+            SortAndUpdateTotalTransactionHistory();
             SaveTransactionHistory();
         }
         catch (Exception)
@@ -99,7 +100,7 @@ public partial class DailyTransactionPage : ContentPage
         if (sender is not Button button) { return; }
         if (button.BindingContext is not TransactionItem item) { return; }
         TransactionHistory.Remove(item);
-        SortTransactionHistory();
+        SortAndUpdateTotalTransactionHistory();
         SaveTransactionHistory();
     }
 
@@ -113,10 +114,19 @@ public partial class DailyTransactionPage : ContentPage
         File.WriteAllLines(userTransactionHistoryDataFile, TransactionHistory.Select(item => item.GetCSVString()));
     }
 
-    private void SortTransactionHistory()
+    private void SortAndUpdateTotalTransactionHistory()
     {
+        long total = 0;
         var sortedTransactions = TransactionHistory.OrderBy(item => item.DateTimeOfItem).ToList();
         TransactionHistory.Clear();
-        foreach (var item in sortedTransactions) { TransactionHistory.Add(item); }
+        foreach (var item in sortedTransactions)
+        {
+            TransactionHistory.Add(item);
+            total += item.ToLong();
+        }
+        total_LB.Text = $"${total / 100}.{Math.Abs(total % 100)}";
+        if (total > 0) { total_LB.TextColor = Colors.Green; }
+        else if (total < 0) { total_LB.TextColor = Colors.Red; }
+        else { total_LB.TextColor = Colors.White; }
     }
 }

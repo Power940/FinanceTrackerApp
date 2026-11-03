@@ -27,5 +27,12 @@ namespace PotatoUnitedCreditUnion
         {
             return $"{Message},{AmmountPrimary},{AmountSecondary},{DateTimeOfItem.ToBinary()}";
         }
+
+        public long ToLong()
+        {
+            if (AmountSecondary / 100 == 0)
+                return AmmountPrimary * 100 + AmountSecondary;
+            return -((AmmountPrimary * 100) + (AmountSecondary % 100));
+        }
     };
 }
