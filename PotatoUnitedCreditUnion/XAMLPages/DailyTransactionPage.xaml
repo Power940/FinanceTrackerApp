@@ -99,7 +99,7 @@
                    Grid.Row="2" Grid.Column="1"
                    HeightRequest="50"
                    VerticalOptions="Start"
-                   FontSize="24" Placeholder="0"
+                   FontSize="24" Placeholder="$0"
                    ReturnType="Next"
                    TextChanged="OnNumericTextChanged"/>
 

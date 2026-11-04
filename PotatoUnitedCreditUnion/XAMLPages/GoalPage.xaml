@@ -50,10 +50,10 @@
                                        FontSize="18" FontAttributes="Bold" TextColor="Black"/>
 
                                 <Label Text="{Binding GoalCashString, StringFormat='Goal: {0}'}"
-                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+                                       FontSize="14" FontAttributes="Bold" TextColor="Green"/>
 
                                 <Label Text="{Binding RealCashString, StringFormat='Current: {0}'}"
-                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding RealCashStringColor}"/>
 
                                 <Label Text="{Binding Message}"
                                        FontSize="18" FontAttributes="Bold" TextColor="Black"/>
@@ -100,25 +100,25 @@
                                                    Spacing="5"
                                                    VerticalOptions="Center">
 
-                                <Label Text="{Binding DateTimeOfGoal, StringFormat='{0:MM/dd/yy}'}"
+                                <Label Text="{Binding DateOfGoal, StringFormat='{0:MM/dd/yy}'}"
                                        FontSize="18" FontAttributes="Bold" TextColor="Black"/>
 
                                 <Label Text="{Binding GoalCashString, StringFormat='Goal: {0}'}"
-                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+                                       FontSize="14" FontAttributes="Bold" TextColor="Green"/>
 
                                 <Label Text="{Binding RealCashString, StringFormat='Current: {0}'}"
-                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding RealCashStringColor}"/>
 
                                 <Label Text="{Binding Message}"
                                        FontSize="18" FontAttributes="Bold" TextColor="Black"/>
 
                             </HorizontalStackLayout>
 
-                            <HorizontalStackLayout Grid.Column="0"
+                            <HorizontalStackLayout Grid.Column="1"
                                                    Spacing="5"
                                                    VerticalOptions="Center">
 
-                                <Button Text="Duplicate for today"
+                                <Button Text="Duplicate"
                                         VerticalOptions="Center"
                                         Clicked="Duplicate_BTN_Clicked"/>
 
@@ -146,6 +146,59 @@
 
         <Grid Grid.Column="2" Grid.Row="1" RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *">
 
+            <Label Grid.Row="0" Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   FontSize="20" TextColor="White"
+                   Text="New Goal"/>
+
+            <Label x:Name="customOrDaily_LB"
+                   Grid.Row="1" Grid.Column="0"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   FontSize="20" TextColor="White"
+                   Text="Mode: Custom"/>
+
+            <Switch x:Name="customOrDaily_SW"
+                    Grid.Row="2" Grid.Column="0"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    IsToggled="false"
+                    Toggled="CustomOrDaily_SW_Toggled"/>
+
+            <Entry x:Name="primary_ENT"
+                   Grid.Row="1" Grid.Column="1"
+                   HeightRequest="50"
+                   HorizontalOptions="End"
+                   FontSize="24" Placeholder="$0"
+                   ReturnType="Next"
+                   TextChanged="OnNumericTextChanged"/>
+
+            <Entry x:Name="secondary_ENT"
+                   Grid.Row="1" Grid.Column="2"
+                   HeightRequest="50"
+                   HorizontalOptions="Start"
+                   FontSize="24" Placeholder="00"
+                   MaxLength="2"
+                   ReturnType="Next"
+                   TextChanged="OnNumericTextChanged"/>
+
+            <Entry x:Name="message_ENT"
+                   Grid.Row="3" Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   FontSize="24" Placeholder="Message"
+                   Margin="10"
+                   ReturnType="Next"
+                   TextChanged="NoCommaTextChanged"/>
+
+            <DatePicker x:Name="dateStart_DP"
+                        Grid.Row="2" Grid.Column="1"/>
+
+            <DatePicker x:Name="dateEnd_DP"
+                        Grid.Row="2" Grid.Column="2"/>
+
+            <Button Grid.Row="4" Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="10"
+                    Text="Create Item" Clicked="Create_BTN_Clicked"/>
         </Grid>
 
     </Grid>

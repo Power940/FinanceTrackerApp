@@ -124,7 +124,7 @@ public partial class DailyTransactionPage : ContentPage
             TransactionHistory.Add(item);
             total += item.ToLong();
         }
-        total_LB.Text = $"${total / 100}.{Math.Abs(total % 100)}";
+        total_LB.Text = $"${total / 100}.{Math.Abs(total % 100).ToString().PadLeft(2, '0')}";
         if (total > 0) { total_LB.TextColor = Colors.Green; }
         else if (total < 0) { total_LB.TextColor = Colors.Red; }
         else { total_LB.TextColor = Colors.White; }

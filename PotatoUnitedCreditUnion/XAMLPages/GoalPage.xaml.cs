@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace PotatoUnitedCreditUnion;
 
@@ -36,14 +37,16 @@ public partial class GoalPage : ContentPage
         }
 
         TransactionHistory.Clear();
-        foreach (string line in File.ReadLines(userGoalDataFile))
+        foreach (string line in File.ReadLines(userTransactionHistoryDataFile))
         {
             if (String.IsNullOrWhiteSpace(line)) { continue; }
             if (line.Split(',') is string[] lineData && lineData.Length == 4)
             {
-                uint AmmountPrimary = uint.Parse(lineData[1]);
+                long AmmountPrimary = uint.Parse(lineData[1]);
                 byte AmountSecondary = byte.Parse(lineData[2]);
                 DateTime DateTimeOfItem = DateTime.FromBinary(long.Parse(lineData[3]));
+
+                if (!TransactionHistory.ContainsKey(DateTimeOfItem.Date)) { TransactionHistory[DateTimeOfItem.Date] = 0; }
 
                 if (AmountSecondary / 100 == 0) { TransactionHistory[DateTimeOfItem.Date] += AmmountPrimary * 100 + AmountSecondary; }
                 else { TransactionHistory[DateTimeOfItem.Date] -= (AmmountPrimary * 100) + (AmountSecondary % 100); }
@@ -55,9 +58,9 @@ public partial class GoalPage : ContentPage
         foreach (string line in File.ReadLines(userGoalDataFile))
         {
             if (String.IsNullOrWhiteSpace(line)) { continue; }
-            if (line.Split(',') is string[] lineData && (lineData.Length == 4 || lineData.Length == 5))
+            if (line.Split(',') is string[] lineData)
             {
-                if (lineData[0] == "daily")
+                if (lineData[0] == "daily" && lineData.Length == 4)
                 {
                     DailyGoal temp = new() {
                         Message = lineData[1],
@@ -67,7 +70,7 @@ public partial class GoalPage : ContentPage
 
                     DailyGoals.Add(temp);
                 }
-                else if (lineData[0] == "custom")
+                else if (lineData[0] == "custom" && lineData.Length == 5)
                 {
                     CustomGoal temp = new() {
                         Message = lineData[1],
@@ -82,6 +85,36 @@ public partial class GoalPage : ContentPage
         }
 
         UpdateAllRealCashStrings();
+    }
+
+    private void OnNumericTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        if (sender is not Entry entry) { return; }
+        if (string.IsNullOrEmpty(e.NewTextValue)) return;
+        if (!Regex.IsMatch(e.NewTextValue, @"^[0-9]*$")) { entry.Text = e.OldTextValue; }
+    }
+
+    private void NoCommaTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        if (sender is not Entry entry) { return; }
+        if (string.IsNullOrEmpty(e.NewTextValue)) return;
+        if (Regex.IsMatch(e.NewTextValue, @",")) { entry.Text = e.OldTextValue; }
+    }
+
+    private void CustomOrDaily_SW_Toggled(object? sender, ToggledEventArgs e)
+    {
+        if (e.Value)
+        {
+            customOrDaily_LB.Text = "Mode:\nDaily";
+            dateEnd_DP.IsEnabled = false;
+            dateEnd_DP.IsVisible = false;
+        }
+        else
+        {
+            customOrDaily_LB.Text = "Mode:\nCustom";
+            dateEnd_DP.IsEnabled = true;
+            dateEnd_DP.IsVisible = true;
+        }
     }
 
     private async void Back_BTN_Clicked(object? sender, EventArgs e)
@@ -117,6 +150,34 @@ public partial class GoalPage : ContentPage
 
     private void Create_BTN_Clicked(object? sender, EventArgs e)
     {
+        if (customOrDaily_SW.IsToggled)
+        {
+            DailyGoal temp = new()
+            {
+                Message = message_ENT.Text,
+                GoalCashString = $"$+{primary_ENT.Text ?? "0"}.{(secondary_ENT.Text ?? "00").PadLeft(2, '0')}",
+                DateOfGoal = dateStart_DP.Date ?? DateTime.Today
+            };
+            if (int.Parse(primary_ENT.Text ?? "0") == 0 && int.Parse(secondary_ENT.Text ?? "0") == 0) { temp.GoalCashString = "$0.00"; }
+
+            DailyGoals.Add(temp);
+        }
+        else
+        {
+            CustomGoal temp = new()
+            {
+                Message = message_ENT.Text,
+                GoalCashString = $"$+{primary_ENT.Text ?? "0"}.{(secondary_ENT.Text ?? "00").PadLeft(2, '0')}",
+                DateTimeStart = dateStart_DP.Date ?? DateTime.Today,
+                DateTimeEnd = dateEnd_DP.Date ?? DateTime.Today.AddDays(1)
+            };
+            if (int.Parse(primary_ENT.Text ?? "0") == 0 && int.Parse(secondary_ENT.Text ?? "0") == 0) { temp.GoalCashString = "$0.00"; }
+
+            CustomGoals.Add(temp);
+        }
+
+        UpdateAllRealCashStrings();
+        SaveGoals();
     }
 
     private void SaveGoals()
@@ -131,24 +192,39 @@ public partial class GoalPage : ContentPage
     {
         foreach (DailyGoal goal in DailyGoals)
         {
-            long total = TransactionHistory[goal.DateOfGoal.Date];
-            if (total > 0) { goal.RealCashString = $"$+{total / 100}.{total % 100}"; }
-            else if (total < 0) { goal.RealCashString = $"${total / 100}.{Math.Abs(total) % 100}"; }
+            long total = 0;
+            if (TransactionHistory.ContainsKey(goal.DateOfGoal.Date)) { total = TransactionHistory[goal.DateOfGoal.Date]; }
+            if (total > 0) { goal.RealCashString = $"$+{total / 100}.{(total % 100).ToString().PadLeft(2, '0')}"; }
+            else if (total < 0) { goal.RealCashString = $"${total / 100}.{(Math.Abs(total) % 100).ToString().PadLeft(2, '0')}"; }
             else { goal.RealCashString = "$0.00"; }
+
+            long expectedTotal = (long.Parse(goal.GoalCashString.AsSpan()[2..^3]) * 100) + long.Parse(goal.GoalCashString.AsSpan()[^2..]);
+            if (goal.GoalCashString.Contains('-')) { expectedTotal *= -1; }
+
+            if (total > expectedTotal) { goal.RealCashStringColor = Colors.Green; }
+            else if (total < expectedTotal) { goal.RealCashStringColor = Colors.Red; }
+            else { goal.RealCashStringColor = Colors.Black; }
         }
 
         foreach (CustomGoal goal in CustomGoals)
         {
             long total = 0;
 
-            for (DateTime current = goal.DateTimeStart; current.Date <= goal.DateTimeEnd.Date; current.AddDays(1))
+            for (DateTime current = goal.DateTimeStart; current.Date <= goal.DateTimeEnd.Date; current = current.AddDays(1))
             {
-                total += TransactionHistory[current.Date];
+                if (TransactionHistory.ContainsKey(current.Date)) { total += TransactionHistory[current.Date]; }
             }
 
-            if (total > 0) { goal.RealCashString = $"$+{total / 100}.{total % 100}"; }
-            else if (total < 0) { goal.RealCashString = $"${total / 100}.{Math.Abs(total) % 100}"; }
+            if (total > 0) { goal.RealCashString = $"$+{total / 100}.{(total % 100).ToString().PadLeft(2, '0')}"; }
+            else if (total < 0) { goal.RealCashString = $"${total / 100}.{(Math.Abs(total) % 100).ToString().PadLeft(2, '0')}"; }
             else { goal.RealCashString = "$0.00"; }
+
+            long expectedTotal = (long.Parse(goal.GoalCashString.AsSpan()[2..^3]) * 100) + long.Parse(goal.GoalCashString.AsSpan()[^2..]);
+            if (goal.GoalCashString.Contains('-')) { expectedTotal *= -1; }
+
+            if (total > expectedTotal) { goal.RealCashStringColor = Colors.Green; }
+            else if (total < expectedTotal) { goal.RealCashStringColor = Colors.Red; }
+            else { goal.RealCashStringColor = Colors.Black; }
         }
     }
 }

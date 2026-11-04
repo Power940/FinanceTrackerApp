@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace PotatoUnitedCreditUnion
 {
-    public class TransactionItem : ICSV
+    public class TransactionItem : ICSV, INotifyPropertyChanged
     {
         public string? Message { get; set; }
 
@@ -16,11 +17,12 @@ namespace PotatoUnitedCreditUnion
 
         public DateTime DateTimeOfItem { get; set; }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public void UpdateCashString()
         {
             if (AmmountPrimary == 0 && AmountSecondary % 100 == 0) { CashString = ""; return; }
-            CashString = $"${((AmountSecondary / 100 == 0) ? "+" : "-")}{AmmountPrimary}.{AmountSecondary % 100}";
+            CashString = $"${((AmountSecondary / 100 == 0) ? "+" : "-")}{AmmountPrimary}.{(AmountSecondary % 100).ToString().PadRight(2,'0')}";
         }
 
         public string GetCSVString()
