@@ -10,7 +10,7 @@ public partial class LoginPage : ContentPage
 
     private int userIdIndex;
     private int newUserIdNum;
-    private string[] userLoginParts = new string[2];
+    private string[] userLoginParts = new string[3];
     private List<int> userIds = [];
 
     public LoginPage()
@@ -28,7 +28,7 @@ public partial class LoginPage : ContentPage
     {
         userIdIndex = -1;
         newUserIdNum = 0;
-        userLoginParts = new string[2];
+        userLoginParts = new string[3];
         userIds = [];
 
         if (!File.Exists(userDataFilePath))
@@ -130,7 +130,7 @@ public partial class LoginPage : ContentPage
             File.AppendAllText(userDataFilePath, $"{newUserIdNum},{user_ENT.Text},{pass_ENT.Text}\n");
 
             MainPage.USER_ID = newUserIdNum;
-            MainPage.USER_DIR_PATH = Path.Combine(FileSystem.Current.AppDataDirectory, userLoginParts[0].ToString());
+            MainPage.USER_DIR_PATH = Path.Combine(FileSystem.Current.AppDataDirectory, newUserIdNum.ToString());
 
             await Shell.Current.GoToAsync("..");
         }
