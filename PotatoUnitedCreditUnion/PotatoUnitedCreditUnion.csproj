@@ -44,15 +44,10 @@
 
 	<ItemGroup>
 	  <Compile Remove="MAUI-Dep\**" />
-	  <Compile Remove="NewFolder\**" />
 	  <EmbeddedResource Remove="MAUI-Dep\**" />
-	  <EmbeddedResource Remove="NewFolder\**" />
 	  <MauiCss Remove="MAUI-Dep\**" />
-	  <MauiCss Remove="NewFolder\**" />
 	  <MauiXaml Remove="MAUI-Dep\**" />
-	  <MauiXaml Remove="NewFolder\**" />
 	  <None Remove="MAUI-Dep\**" />
-	  <None Remove="NewFolder\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -61,16 +56,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="DailyTransactionPage.xaml">
+	  <MauiXaml Update="XAMLPages\DailyTransactionPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="LoginPage.xaml">
+	  <MauiXaml Update="XAMLPages\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="SettingsPage.xaml">
+	  <MauiXaml Update="XAMLPages\GoalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="TransactionHistoryPage.xaml">
+	  <MauiXaml Update="XAMLPages\SettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="XAMLPages\TransactionHistoryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
@@ -80,14 +78,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PRIResource Remove="NewFolder\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="LoginPage.xaml.cs">
+	  <Compile Update="XAMLPages\LoginPage.xaml.cs">
 	    <DependentUpon>LoginPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="SettingsPage.xaml.cs">
+	  <Compile Update="XAMLPages\GoalPage.xaml.cs">
+	    <DependentUpon>GoalPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="XAMLPages\SettingsPage.xaml.cs">
 	    <DependentUpon>SettingsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>

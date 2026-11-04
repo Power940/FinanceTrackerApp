@@ -10,6 +10,7 @@
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(DailyTransactionPage), typeof(DailyTransactionPage));
             Routing.RegisterRoute(nameof(TransactionHistoryPage), typeof(TransactionHistoryPage));
+            Routing.RegisterRoute(nameof(GoalPage), typeof(GoalPage));
 
             // how to do stuff with multiple pages
             // Register page:       Routing.RegisterRoute(nameof(PageClass), typeof(PageClass));

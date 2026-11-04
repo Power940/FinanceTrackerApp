@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PotatoUnitedCreditUnion
 {
-    public class TransactionItem
+    public class TransactionItem : ICSV
     {
         public string? Message { get; set; }
 

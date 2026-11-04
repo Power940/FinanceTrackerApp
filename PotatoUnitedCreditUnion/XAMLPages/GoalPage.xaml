@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PotatoUnitedCreditUnion.GoalPage"
+             xmlns:local="clr-namespace:PotatoUnitedCreditUnion">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:CashColorConverter x:Key="CashColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <Grid ColumnDefinitions="2*, 2*, *" RowDefinitions="*, 8*">
+
+        <!-- Scrollable transaction history -->
+        <Label Grid.Row="0" Grid.Column="0"
+               HorizontalOptions="Center" VerticalOptions="Center"
+               FontSize="20" TextColor="White"
+               Text="Custom Length Goals"/>
+
+        <CollectionView x:Name="scrollableCustomGoals_CV"
+                        Grid.Column="0" Grid.Row="1"
+                        ItemsSource="{Binding CustomGoals}"
+                        Margin="20"
+                        VerticalOptions="Fill"
+                        HorizontalOptions="Fill">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 8"
+                            StrokeThickness="1"
+                            Margin="0,0,0,10"
+                            Padding="15"
+                            BackgroundColor="#E0E0E0">
+
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="5">
+
+                            <HorizontalStackLayout Grid.Column="0"
+                                                   Spacing="5"
+                                                   VerticalOptions="Center">
+
+                                <Label Text="{Binding DateTimeStart, StringFormat='From {0:MM/dd/yy}'}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+
+                                <Label Text="{Binding DateTimeEnd, StringFormat='To {0:MM/dd/yy}'}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+
+                                <Label Text="{Binding GoalCashString, StringFormat='Goal: {0}'}"
+                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+
+                                <Label Text="{Binding RealCashString, StringFormat='Current: {0}'}"
+                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+
+                                <Label Text="{Binding Message}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+
+                            </HorizontalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="Delete"
+                                    VerticalOptions="Center"
+                                    Clicked="Delete_BTN_Clicked"/>
+
+                        </Grid>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+        
+        <Label Grid.Row="0" Grid.Column="1"
+               HorizontalOptions="Center" VerticalOptions="Center"
+               FontSize="20" TextColor="White"
+               Text="Daily Goals"/>
+
+        <CollectionView x:Name="scrollableDailyGoals_CV"
+                        Grid.Column="1" Grid.Row="1"
+                        ItemsSource="{Binding DailyGoals}"
+                        Margin="20"
+                        VerticalOptions="Fill"
+                        HorizontalOptions="Fill">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 8"
+                            StrokeThickness="1"
+                            Margin="0,0,0,10"
+                            Padding="15"
+                            BackgroundColor="#E0E0E0">
+
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="5">
+
+                            <HorizontalStackLayout Grid.Column="0"
+                                                   Spacing="5"
+                                                   VerticalOptions="Center">
+
+                                <Label Text="{Binding DateTimeOfGoal, StringFormat='{0:MM/dd/yy}'}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+
+                                <Label Text="{Binding GoalCashString, StringFormat='Goal: {0}'}"
+                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+
+                                <Label Text="{Binding RealCashString, StringFormat='Current: {0}'}"
+                                       FontSize="14" FontAttributes="Bold" TextColor="{Binding CashString, Converter={StaticResource CashColorConverter}}"/>
+
+                                <Label Text="{Binding Message}"
+                                       FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Grid.Column="0"
+                                                   Spacing="5"
+                                                   VerticalOptions="Center">
+
+                                <Button Text="Duplicate for today"
+                                        VerticalOptions="Center"
+                                        Clicked="Duplicate_BTN_Clicked"/>
+
+                                <Button Text="Delete"
+                                        VerticalOptions="Center"
+                                        Clicked="Delete_BTN_Clicked"/>
+
+                            </HorizontalStackLayout>
+
+                        </Grid>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <!-- Controls -->
+
+        <Button x:Name="back_BTN"
+                    Grid.Row="0" Grid.Column="2"
+                    WidthRequest="50" HeightRequest="50" Margin="10"
+                    HorizontalOptions="End" VerticalOptions="Start"
+                    Text="->" Clicked="Back_BTN_Clicked"/>
+
+        <Grid Grid.Column="2" Grid.Row="1" RowDefinitions="*, *, *, *, *" ColumnDefinitions="*, *, *">
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

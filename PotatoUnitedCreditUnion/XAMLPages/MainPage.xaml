@@ -22,6 +22,10 @@
         <Button x:Name="history_BTN"
                 AbsoluteLayout.LayoutBounds="0.5, 0.6, AutoSize, AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional"
                 Text="historyPg" Clicked="History_BTN_Clicked"/>
+
+        <Button x:Name="goal_BTN"
+                AbsoluteLayout.LayoutBounds="0.5, 0.7, AutoSize, AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional"
+                Text="goalPg" Clicked="Goal_BTN_Clicked"/>
     </AbsoluteLayout>
 
 </ContentPage>

@@ -27,5 +27,10 @@ namespace PotatoUnitedCreditUnion
         {
             Shell.Current.GoToAsync(nameof(TransactionHistoryPage));
         }
+
+        private void Goal_BTN_Clicked(object? sender, EventArgs e)
+        {
+            Shell.Current.GoToAsync(nameof(GoalPage));
+        }
     }
 }
