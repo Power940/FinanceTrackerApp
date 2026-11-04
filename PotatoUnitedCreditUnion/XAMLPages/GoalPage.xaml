@@ -13,7 +13,7 @@
     </ContentPage.Resources>
 
 
-    <Grid ColumnDefinitions="2*, 2*, *" RowDefinitions="*, 8*">
+    <Grid ColumnDefinitions="3*, 2*, *" RowDefinitions="*, 8*">
 
         <!-- Scrollable transaction history -->
         <Label Grid.Row="0" Grid.Column="0"

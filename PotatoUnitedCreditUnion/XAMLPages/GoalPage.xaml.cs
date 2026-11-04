@@ -158,7 +158,7 @@ public partial class GoalPage : ContentPage
                 GoalCashString = $"$+{primary_ENT.Text ?? "0"}.{(secondary_ENT.Text ?? "00").PadLeft(2, '0')}",
                 DateOfGoal = dateStart_DP.Date ?? DateTime.Today
             };
-            if (int.Parse(primary_ENT.Text ?? "0") == 0 && int.Parse(secondary_ENT.Text ?? "0") == 0) { temp.GoalCashString = "$0.00"; }
+            if (int.Parse(primary_ENT.Text ?? "0") == 0 && int.Parse(secondary_ENT.Text ?? "0") == 0) { temp.GoalCashString = "$+0.00"; }
 
             DailyGoals.Add(temp);
         }
@@ -171,7 +171,7 @@ public partial class GoalPage : ContentPage
                 DateTimeStart = dateStart_DP.Date ?? DateTime.Today,
                 DateTimeEnd = dateEnd_DP.Date ?? DateTime.Today.AddDays(1)
             };
-            if (int.Parse(primary_ENT.Text ?? "0") == 0 && int.Parse(secondary_ENT.Text ?? "0") == 0) { temp.GoalCashString = "$0.00"; }
+            if (int.Parse(primary_ENT.Text ?? "0") == 0 && int.Parse(secondary_ENT.Text ?? "0") == 0) { temp.GoalCashString = "$+0.00"; }
 
             CustomGoals.Add(temp);
         }
